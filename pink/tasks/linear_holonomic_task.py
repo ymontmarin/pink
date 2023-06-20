@@ -180,26 +180,24 @@ class LinearHolonomicTask(Task):
         )
         if not self.A.shape[1] == configuration.model.nv:
             raise TaskJacobianNotSet
-        # print(configuration.q[7:])
-        # print(pin.difference(configuration.model, q_ref, configuration.q)[6:])
-        # print((configuration.q[7:] - pin.difference(configuration.model, q_ref, configuration.q)[6:]).max())
-        # assert np.isclose((configuration.q[7:] - pin.difference(configuration.model, q_ref, configuration.q)[6:]).max(), 0.) 
 
-        # print(pin.difference(configuration.model, q_ref, configuration.q))
-        # print(self.A
+        # # What it is ! Instability is hudge
+        # return (
+        #     self.A
         #     @ pin.difference(configuration.model, q_ref, configuration.q)
         #     - self.b
         # )
-            # @ pin.difference(configuration.model, q_ref, configuration.q)[6:]
-            # @ configuration.q[7:]
 
-        # (
+        # # Without using flying base, instability is still here
+        # return (
         #     self.A[:, 6:]
         #     @ configuration.q[7:]
         #     - self.b
         # )
 
+        # What was in code: False...
         return np.zeros(self.A.shape[0])
+
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
@@ -225,15 +223,13 @@ class LinearHolonomicTask(Task):
         )
         if not self.A.shape[1] == configuration.model.nv:
             raise TaskJacobianNotSet
-        # print(pin.dDifference(
-        #     configuration.model, q_ref, configuration.q, pin.ARG1
-        # ))
 
-        # pin.dDifference(
+        # # What it is
+        # return self.A @ pin.dDifference(
         #             configuration.model, q_ref, configuration.q, pin.ARG1
         #         )[6:, :]
 
-
+        # # What it is
         return self.A
 
     def compute_qp_objective(

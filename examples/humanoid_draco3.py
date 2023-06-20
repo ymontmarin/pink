@@ -121,9 +121,21 @@ if __name__ == "__main__":
         right_foot_task,
         right_wrist_task,
         posture_task,
-        # l_knee_holonomic_task,
-        r_knee_holonomic_task,
+        # l_knee_holonomic_task,  No problem with that
+        r_knee_holonomic_task,  # This is the one that create instability !
     ]
+    # In fact it is because equilibrium is near pi !
+    # So linear task is not appropriate. Even if S1 is flat, it is compact, there is cycles
+    # So near antipode, it is badly define, not \|q_3 - q_4\|  index 3 and 4 of a conf
+    # Should be log(q_3^-1 q_4) with log being log in SO(2) = S1
+    # OK with dedivated task for join coupling.
+    # But what for general ?
+    # Need to recover elementary lie group structure of the composite configuration space !
+    # C = G1xG2xG3
+    # Task f: C -> G4
+    # obj O in G4
+    # Residual: log4(O^-1 f(q))
+    # Jacobian: Ok with Lie group differentiation !!!! --> Cf futur lib Yann
 
     # Task target specifications
     pelvis_pose = configuration.get_transform_frame_to_world(
