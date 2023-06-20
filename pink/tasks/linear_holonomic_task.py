@@ -95,7 +95,7 @@ class LinearHolonomicTask(Task):
             raise TaskJacobianNotSet(
                 "task Jacobian dimension is not set properly"
             )
-        return np.zeros(self.A.shape[0])
+        return self.A[:, 6:] @ configuration.q[7:]
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
