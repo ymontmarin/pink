@@ -121,7 +121,7 @@ if __name__ == "__main__":
         right_foot_task,
         right_wrist_task,
         posture_task,
-        l_knee_holonomic_task,
+        # l_knee_holonomic_task,
         r_knee_holonomic_task,
     ]
 

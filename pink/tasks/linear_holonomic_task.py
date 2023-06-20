@@ -153,6 +153,7 @@ class LinearHolonomicTask(Task):
         self.b = b
         self.cost = cost
         self.q_0 = q_0
+        print(self.A)
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task error function.
@@ -179,11 +180,26 @@ class LinearHolonomicTask(Task):
         )
         if not self.A.shape[1] == configuration.model.nv:
             raise TaskJacobianNotSet
-        return (
-            self.A
-            @ pin.difference(configuration.model, q_ref, configuration.q)
-            - self.b
-        )
+        # print(configuration.q[7:])
+        # print(pin.difference(configuration.model, q_ref, configuration.q)[6:])
+        # print((configuration.q[7:] - pin.difference(configuration.model, q_ref, configuration.q)[6:]).max())
+        # assert np.isclose((configuration.q[7:] - pin.difference(configuration.model, q_ref, configuration.q)[6:]).max(), 0.) 
+
+        # print(pin.difference(configuration.model, q_ref, configuration.q))
+        # print(self.A
+        #     @ pin.difference(configuration.model, q_ref, configuration.q)
+        #     - self.b
+        # )
+            # @ pin.difference(configuration.model, q_ref, configuration.q)[6:]
+            # @ configuration.q[7:]
+
+        # (
+        #     self.A[:, 6:]
+        #     @ configuration.q[7:]
+        #     - self.b
+        # )
+
+        return np.zeros(self.A.shape[0])
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
@@ -209,9 +225,16 @@ class LinearHolonomicTask(Task):
         )
         if not self.A.shape[1] == configuration.model.nv:
             raise TaskJacobianNotSet
-        return self.A @ pin.dDifference(
-            configuration.model, q_ref, configuration.q, pin.ARG1
-        )
+        # print(pin.dDifference(
+        #     configuration.model, q_ref, configuration.q, pin.ARG1
+        # ))
+
+        # pin.dDifference(
+        #             configuration.model, q_ref, configuration.q, pin.ARG1
+        #         )[6:, :]
+
+
+        return self.A
 
     def compute_qp_objective(
         self, configuration: Configuration
